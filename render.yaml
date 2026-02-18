@@ -1,7 +1,15 @@
+databases:
+  - name: ticket-db
+    plan: free
+    databaseName: tickets_db
+    user: tickets_user
+
 services:
   - type: web
     name: support-ticket-backend
     env: python
+    region: oregon
+    plan: free
     buildCommand: pip install -r requirements.txt
     startCommand: gunicorn support_backend.wsgi:application
     envVars:
@@ -20,17 +28,12 @@ services:
       - key: PYTHON_VERSION
         value: 3.11.0
 
-  - type: pserv
-    name: ticket-db
-    plan: free
-    databaseName: tickets_db
-    databaseUser: tickets_user
-
   - type: web
     name: support-ticket-frontend
     env: static
+    region: oregon
     buildCommand: cd frontend && npm install && npm run build
     staticPublishPath: ./frontend/build
     envVars:
       - key: REACT_APP_API_BASE
-        value: https://support-ticket-backend.onrender.com/api/tickets
+        sync: false
