@@ -30,9 +30,10 @@ services:
 
   - type: web
     name: support-ticket-frontend
-    env: static
+    env: node
+    plan: free
     buildCommand: cd frontend && npm install && npm run build
-    staticPublishPath: frontend/build
+    startCommand: npm install -g serve && serve -s frontend/build -l 3000
     envVars:
       - key: REACT_APP_API_BASE
         sync: false
